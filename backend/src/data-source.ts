@@ -9,6 +9,6 @@ export const AppDataSource = new DataSource({
   username: "postgres",
   password: "",
   database: "vacation_db",
-  synchronize: true,
+  synchronize: false,
   entities: [VacationRequest],
 });
