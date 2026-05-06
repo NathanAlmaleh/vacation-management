@@ -1,6 +1,16 @@
 import express from "express";
 import cors from "cors";
 
+import { AppDataSource } from "./data-source";
+
+AppDataSource.initialize()
+  .then(() => {
+    console.log("Database connected");
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+
 const app = express();
 
 app.use(cors());
