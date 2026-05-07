@@ -1,27 +1,56 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted} from "vue";
+import api from "../services/api";
+
 
 type Role = "requester" | "validator";
 
-const users = ref([
-  { id: 1, name: "Alice", role: "requester" },
-  { id: 2, name: "Bob", role: "validator" },
-]);
+type User = {
+  id: number;
+  name: string;
+  role: Role;
+};
+
+const users = ref<User[]>([]);
 
 const newUser = ref({
   name: "",
   role: "requester" as Role,
 });
 
-const createUser = () => {
-  users.value.push({
-    id: users.value.length + 1,
-    name: newUser.value.name,
-    role: newUser.value.role,
-  });
-
-  newUser.value = { name: "", role: "requester" };
+/** Fetch users from backend */
+const fetchUsers = async () => {
+  const res = await api.get("/users");
+  users.value = res.data;
 };
+
+/** Create user */
+const createUser = async () => {
+  try {
+    if (!newUser.value.name.trim()) {
+      return;
+    }
+
+    const res = await api.post("/users", {
+      name: newUser.value.name,
+      role: newUser.value.role,
+    });
+
+    // add newly created user to list
+    users.value.push(res.data);
+
+    // reset form
+    newUser.value = {
+      name: "",
+      role: "requester",
+    };
+  } catch (err) {
+    console.error("Failed to create user", err);
+  }
+};
+
+onMounted(fetchUsers);
+
 </script>
 
 <template>
