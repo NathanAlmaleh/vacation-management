@@ -370,6 +370,7 @@ button:disabled {
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 16px;
+  justify-content: flex-end;
 }
 
 .request-actions .remove {

@@ -141,38 +141,27 @@ onMounted(fetchRequests);
             <div>
               <span class="request-user">{{ request.user?.name ?? "Unknown user" }}</span>
               <span class="request-status" :class="['status-' + request.status]">{{ request.status }}</span>
+
             </div>
+            <p class="request-dates">
+              {{ formatDate(request.startDate) }} → {{ formatDate(request.endDate) }}
+
+            </p>
+
           </div>
 
           <p class="request-reason">{{ request.reason }}</p>
 
-          <div class="request-footer">
-            <p class="request-dates">
-              {{ formatDate(request.startDate) }} → {{ formatDate(request.endDate) }}
-            </p>
-            <button
-              v-if="canDelete()"
-              class="delete-button"
-              @click="removeRequest(request.id)"
-            >
-              Remove
-            </button>
-          </div>
-
           <div class="request-actions">
-            <button
-              v-if="canApprove(request)"
-              class="secondary"
-              @click="changeRequestStatus(request.id, 'approved')"
-            >
+            <button v-if="canApprove(request)" class="secondary" @click="changeRequestStatus(request.id, 'approved')">
               Approve
             </button>
-            <button
-              v-if="canApprove(request)"
-              class="secondary reject"
-              @click="changeRequestStatus(request.id, 'rejected')"
-            >
+            <button v-if="canApprove(request)" class="secondary reject"
+              @click="changeRequestStatus(request.id, 'rejected')">
               Reject
+            </button>
+            <button v-if="canDelete()" class="delete-button" @click="removeRequest(request.id)">
+              Remove
             </button>
           </div>
         </article>
