@@ -5,6 +5,7 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "esModuleInterop": true,
+    "types": ["node", "jest"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strict": false
