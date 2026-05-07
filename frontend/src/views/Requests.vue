@@ -5,6 +5,7 @@ import api from "../services/api";
 type Status = "pending" | "approved" | "rejected";
 
 const requests = ref<any[]>([]);
+const users = ref<{ id: number; name: string }[]>([]);
 
 const form = ref({
   userId: "",
@@ -19,7 +20,10 @@ const fetchRequests = async () => {
 };
 
 const submit = async () => {
-  await api.post("/requests", form.value);
+  await api.post("/requests", {
+    ...form.value,
+    userId: Number(form.value.userId),
+  });
   form.value = { userId: "", startDate: "", endDate: "", reason: "" };
   fetchRequests();
 };
@@ -29,14 +33,28 @@ const updateStatus = async (id: number, status: Status) => {
   fetchRequests();
 };
 
-onMounted(fetchRequests);
+const fetchUsers = async () => {
+  const res = await api.get(`/users/`);
+  users.value = res.data;
+};
+
+onMounted(() => {
+  fetchRequests();
+  fetchUsers();
+});
 </script>
 
 <template>
   <div>
     <h1>Vacation Requests</h1>
 
-    <input v-model="form.userId" placeholder="User ID" />
+    <select v-model="form.userId">
+      <option disabled value="">Select user</option>
+      <option v-for="user in users" :key="user.id" :value="String(user.id)">
+        {{ user.name }}
+      </option>
+    </select>
+
     <input v-model="form.startDate" type="date" />
     <input v-model="form.endDate" type="date" />
     <input v-model="form.reason" placeholder="Reason" />
