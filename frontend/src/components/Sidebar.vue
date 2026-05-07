@@ -1,7 +1,7 @@
 <template>
   <aside class="sidebar">
     <div class="sidebar-header">
-      <p class="sidebar-label">Connected user</p>
+      <h2 class="sidebar-label">Connected user</h2>
       <select
         v-model="selectedUserId"
         @change="onUserChange"
@@ -13,6 +13,11 @@
         </option>
       </select>
       <div v-if="currentUser" class="current-user-meta">
+        <img
+          :src="avatar"
+          alt="User Avatar"
+          class="current-user-avatar"
+        />
         <span class="current-user-name">{{ currentUser.name }}</span>
         <small class="current-user-role">{{ currentUser.role }}</small>
       </div>
@@ -23,16 +28,17 @@
     <nav class="sidebar-nav">
       <h2 class="nav-title">Navigation</h2>
       <router-link to="/requests" class="nav-link" active-class="active-link"
-        >Requests Dashboard</router-link
+        >📊 Requests Dashboard</router-link
       >
       <router-link to="/users" class="nav-link" active-class="active-link"
-        >Users Management</router-link
+        >👥  Users Management</router-link
       >
     </nav>
   </aside>
 </template>
 
 <script setup lang="ts">
+import avatar from '../assets/default-avatar.jpg';
 import { onMounted, ref, watch } from 'vue';
 import { useUsers } from '../composables/useUsers';
 import { useCurrentUser } from '../composables/useCurrentUser';
