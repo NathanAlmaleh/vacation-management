@@ -1,7 +1,7 @@
-import { ref } from "vue";
-import api from "../services/api";
+import { ref } from 'vue';
+import api from '../services/api';
 
-type Role = "requester" | "validator";
+type Role = 'requester' | 'validator';
 
 export type User = {
   id: number;
@@ -18,10 +18,10 @@ export function useUsers() {
     loading.value = true;
     error.value = null;
     try {
-      const response = await api.get<User[]>("/users");
+      const response = await api.get<User[]>('/users');
       users.value = response.data;
     } catch (err) {
-      error.value = "Failed to load users.";
+      error.value = 'Failed to load users.';
       console.error(err);
     } finally {
       loading.value = false;
@@ -30,11 +30,11 @@ export function useUsers() {
 
   const createUser = async (payload: { name: string; role: Role }) => {
     try {
-      const response = await api.post<User>("/users", payload);
+      const response = await api.post<User>('/users', payload);
       users.value.push(response.data);
       return response.data;
     } catch (err) {
-      console.error("Failed to create user", err);
+      console.error('Failed to create user', err);
       throw err;
     }
   };
@@ -44,12 +44,13 @@ export function useUsers() {
       await api.delete(`/users/${id}`);
       users.value = users.value.filter((user) => user.id !== id);
     } catch (err) {
-      console.error("Failed to delete user", err);
+      console.error('Failed to delete user', err);
       throw err;
     }
   };
 
-  const findUserById = (id: number) => users.value.find((user) => user.id === id) ?? null;
+  const findUserById = (id: number) =>
+    users.value.find((user) => user.id === id) ?? null;
 
   return {
     users,

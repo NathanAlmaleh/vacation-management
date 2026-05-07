@@ -1,11 +1,11 @@
-import { Router } from "express";
-import { AppDataSource } from "../data-source";
-import { User, UserRole } from "../entity/User";
+import { Router } from 'express';
+import { AppDataSource } from '../data-source';
+import { User, UserRole } from '../entity/User';
 
 const router = Router();
 
 /** GET all users */
-router.get("/", async (_req, res) => {
+router.get('/', async (_req, res) => {
   try {
     const repo = AppDataSource.getRepository(User);
 
@@ -14,13 +14,13 @@ router.get("/", async (_req, res) => {
     res.json(users);
   } catch (err) {
     res.status(500).json({
-      error: "Failed to fetch users",
+      error: 'Failed to fetch users',
     });
   }
 });
 
 /** CREATE user */
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const repo = AppDataSource.getRepository(User);
 
@@ -31,13 +31,13 @@ router.post("/", async (req, res) => {
     res.json(user);
   } catch (err) {
     res.status(500).json({
-      error: "Failed to create user",
+      error: 'Failed to create user',
     });
   }
 });
 
 /** Delete user */
-router.delete("/:id", async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -46,7 +46,7 @@ router.delete("/:id", async (req, res) => {
     const user = await repo.findOneBy({ id: Number(id) });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: 'User not found' });
     }
 
     await repo.remove(user);
@@ -54,18 +54,18 @@ router.delete("/:id", async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({
-      error: "Failed to delete user",
+      error: 'Failed to delete user',
     });
   }
 });
 
-router.post("/seed", async (_req, res) => {
+router.post('/seed', async (_req, res) => {
   const repo = AppDataSource.getRepository(User);
 
-const users = repo.create([
-  { name: "Alice", role: UserRole.REQUESTER },
-  { name: "Bob", role: UserRole.VALIDATOR },
-]);
+  const users = repo.create([
+    { name: 'Alice', role: UserRole.REQUESTER },
+    { name: 'Bob', role: UserRole.VALIDATOR },
+  ]);
 
   await repo.save(users);
 

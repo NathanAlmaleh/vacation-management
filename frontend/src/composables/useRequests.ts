@@ -1,7 +1,7 @@
-import { ref } from "vue";
-import api from "../services/api";
+import { ref } from 'vue';
+import api from '../services/api';
 
-export type RequestStatus = "pending" | "approved" | "rejected";
+export type RequestStatus = 'pending' | 'approved' | 'rejected';
 
 export type VacationRequest = {
   id: number;
@@ -25,10 +25,10 @@ export function useRequests() {
     loading.value = true;
     error.value = null;
     try {
-      const response = await api.get<VacationRequest[]>("/requests");
+      const response = await api.get<VacationRequest[]>('/requests');
       requests.value = response.data;
     } catch (err) {
-      error.value = "Failed to load requests.";
+      error.value = 'Failed to load requests.';
       console.error(err);
     } finally {
       loading.value = false;
@@ -42,11 +42,11 @@ export function useRequests() {
     reason: string;
   }) => {
     try {
-      const response = await api.post<VacationRequest>("/requests", payload);
+      const response = await api.post<VacationRequest>('/requests', payload);
       requests.value.unshift(response.data);
       return response.data;
     } catch (err) {
-      console.error("Failed to create request", err);
+      console.error('Failed to create request', err);
       throw err;
     }
   };
@@ -56,7 +56,7 @@ export function useRequests() {
       await api.patch(`/requests/${id}`, { status });
       await fetchRequests();
     } catch (err) {
-      console.error("Failed to update request status", err);
+      console.error('Failed to update request status', err);
       throw err;
     }
   };
@@ -66,7 +66,7 @@ export function useRequests() {
       await api.delete(`/requests/${id}`);
       await fetchRequests();
     } catch (err) {
-      console.error("Failed to delete request", err);
+      console.error('Failed to delete request', err);
       throw err;
     }
   };

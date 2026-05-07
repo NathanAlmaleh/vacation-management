@@ -4,13 +4,13 @@ import {
   Column,
   ManyToOne,
   CreateDateColumn,
-} from "typeorm";
-import { User } from "./User";
+} from 'typeorm';
+import { User } from './User';
 
 export enum RequestStatus {
-  PENDING = "pending",
-  APPROVED = "approved",
-  REJECTED = "rejected",
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
 }
 
 @Entity()
@@ -18,7 +18,10 @@ export class VacationRequest {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.requests, { eager: true, onDelete: "CASCADE" })
+  @ManyToOne(() => User, (user) => user.requests, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   user: User;
 
   @Column()
@@ -31,7 +34,7 @@ export class VacationRequest {
   reason: string;
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: RequestStatus,
     default: RequestStatus.PENDING,
   })

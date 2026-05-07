@@ -1,12 +1,12 @@
-import app from "./app";
-import { AppDataSource } from "./data-source";
+import app from './app';
+import { AppDataSource } from './data-source';
 
 AppDataSource.initialize()
   .then(() => {
-    console.log("Database connected");
+    console.log('Database connected');
 
     app.listen(3000, () => {
-      console.log("Server running");
+      console.log('Server running');
     });
   })
   .catch(console.error);

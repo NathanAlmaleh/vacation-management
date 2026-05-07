@@ -1,7 +1,7 @@
-import { ref } from "vue";
-import type { User } from "./useUsers.ts";
+import { ref } from 'vue';
+import type { User } from './useUsers.ts';
 
-const STORAGE_KEY = "vacation-app-current-user";
+const STORAGE_KEY = 'vacation-app-current-user';
 const currentUser = ref<User | null>(null);
 
 export function useCurrentUser() {

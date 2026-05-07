@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { VacationRequest } from "./VacationRequest";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { VacationRequest } from './VacationRequest';
 
 export enum UserRole {
-  REQUESTER = "requester",
-  VALIDATOR = "validator",
+  REQUESTER = 'requester',
+  VALIDATOR = 'validator',
 }
 
 @Entity()
@@ -15,7 +15,7 @@ export class User {
   name: string;
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: UserRole,
   })
   role: UserRole;

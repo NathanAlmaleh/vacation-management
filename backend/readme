@@ -1,17 +1,17 @@
 Create request
 curl -X POST http://localhost:3000/requests \
-  -H "Content-Type: application/json" \
-  -d '{
-    "employeeName": "Nathan",
-    "startDate": "2026-06-01",
-    "endDate": "2026-06-05",
-    "reason": "Vacation"
-  }'
+ -H "Content-Type: application/json" \
+ -d '{
+"employeeName": "Nathan",
+"startDate": "2026-06-01",
+"endDate": "2026-06-05",
+"reason": "Vacation"
+}'
 
 Get all requests
-  curl http://localhost:3000/requests
+curl http://localhost:3000/requests
 
 Approve request
-  curl -X PATCH http://localhost:3000/requests/1 \
-  -H "Content-Type: application/json" \
-  -d '{"status":"approve"}'
+curl -X PATCH http://localhost:3000/requests/1 \
+ -H "Content-Type: application/json" \
+ -d '{"status":"approve"}'
