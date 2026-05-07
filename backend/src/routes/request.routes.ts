@@ -73,17 +73,4 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.post("/seed", async (_req, res) => {
-  const repo = AppDataSource.getRepository(User);
-
-const users = repo.create([
-  { name: "Alice", role: UserRole.REQUESTER },
-  { name: "Bob", role: UserRole.VALIDATOR },
-]);
-
-  await repo.save(users);
-
-  res.json(users);
-});
-
 export default router;

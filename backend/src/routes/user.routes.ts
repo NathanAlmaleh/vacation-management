@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { AppDataSource } from "../data-source";
-import { User } from "../entity/User";
+import { User, UserRole } from "../entity/User";
 
 const router = Router();
 
@@ -57,6 +57,19 @@ router.delete("/:id", async (req, res) => {
       error: "Failed to delete user",
     });
   }
+});
+
+router.post("/seed", async (_req, res) => {
+  const repo = AppDataSource.getRepository(User);
+
+const users = repo.create([
+  { name: "Alice", role: UserRole.REQUESTER },
+  { name: "Bob", role: UserRole.VALIDATOR },
+]);
+
+  await repo.save(users);
+
+  res.json(users);
 });
 
 export default router;
