@@ -39,6 +39,16 @@ export function useUsers() {
     }
   };
 
+  const deleteUser = async (id: number) => {
+    try {
+      await api.delete(`/users/${id}`);
+      users.value = users.value.filter((user) => user.id !== id);
+    } catch (err) {
+      console.error("Failed to delete user", err);
+      throw err;
+    }
+  };
+
   const findUserById = (id: number) => users.value.find((user) => user.id === id) ?? null;
 
   return {
@@ -48,5 +58,6 @@ export function useUsers() {
     fetchUsers,
     createUser,
     findUserById,
+    deleteUser,
   };
 }

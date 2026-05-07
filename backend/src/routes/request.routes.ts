@@ -46,7 +46,31 @@ router.patch("/:id", async (req, res) => {
 
   await repo.update(id, { status, comments });
 
-  res.json({ success: true });
+  const updatedRequest = await repo.findOneBy({ id: Number(id) });
+
+  if (!updatedRequest) {
+    return res.status(404).json({ error: "Request not found" });
+  }
+
+  res.json(updatedRequest);
+});
+
+// Delete request
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const repo = AppDataSource.getRepository(VacationRequest);
+    const request = await repo.findOneBy({ id: Number(id) });
+
+    if (!request) {
+      return res.status(404).json({ error: "Request not found" });
+    }
+
+    await repo.remove(request);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete request" });
+  }
 });
 
 router.post("/seed", async (_req, res) => {

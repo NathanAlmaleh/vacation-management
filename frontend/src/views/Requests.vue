@@ -4,7 +4,7 @@ import { useCurrentUser } from "../composables/useCurrentUser";
 import { useRequests, type RequestStatus } from "../composables/useRequests";
 
 const { currentUser } = useCurrentUser();
-const { requests, loading, error, fetchRequests, createRequest, updateRequestStatus } = useRequests();
+const { requests, loading, error, fetchRequests, createRequest, updateRequestStatus, deleteRequest } = useRequests();
 
 const form = ref({
   startDate: "",
@@ -63,6 +63,28 @@ const changeRequestStatus = async (id: number, status: RequestStatus) => {
   }
 };
 
+const canDelete = () => currentUser.value?.role === "validator";
+
+const removeRequest = async (id: number) => {
+  try {
+    await deleteRequest(id);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) {
+    return dateString;
+  }
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+};
+
 onMounted(fetchRequests);
 </script>
 
@@ -118,12 +140,24 @@ onMounted(fetchRequests);
           <div class="request-meta">
             <div>
               <span class="request-user">{{ request.user?.name ?? "Unknown user" }}</span>
-              <span class="request-status status-{{ request.status }}">{{ request.status }}</span>
+              <span class="request-status" :class="['status-' + request.status]">{{ request.status }}</span>
             </div>
-            <p class="request-dates">{{ request.startDate }} → {{ request.endDate }}</p>
           </div>
 
           <p class="request-reason">{{ request.reason }}</p>
+
+          <div class="request-footer">
+            <p class="request-dates">
+              {{ formatDate(request.startDate) }} → {{ formatDate(request.endDate) }}
+            </p>
+            <button
+              v-if="canDelete()"
+              class="delete-button"
+              @click="removeRequest(request.id)"
+            >
+              Remove
+            </button>
+          </div>
 
           <div class="request-actions">
             <button

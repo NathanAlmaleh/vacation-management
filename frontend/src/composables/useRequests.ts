@@ -53,14 +53,20 @@ export function useRequests() {
 
   const updateRequestStatus = async (id: number, status: RequestStatus) => {
     try {
-      const response = await api.patch<VacationRequest>(`/requests/${id}`, { status });
-      const index = requests.value.findIndex((request) => request.id === id);
-      if (index !== -1) {
-        requests.value[index] = response.data;
-      }
-      return response.data;
+      await api.patch(`/requests/${id}`, { status });
+      await fetchRequests();
     } catch (err) {
       console.error("Failed to update request status", err);
+      throw err;
+    }
+  };
+
+  const deleteRequest = async (id: number) => {
+    try {
+      await api.delete(`/requests/${id}`);
+      await fetchRequests();
+    } catch (err) {
+      console.error("Failed to delete request", err);
       throw err;
     }
   };
@@ -72,5 +78,6 @@ export function useRequests() {
     fetchRequests,
     createRequest,
     updateRequestStatus,
+    deleteRequest,
   };
 }

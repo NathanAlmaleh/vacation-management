@@ -18,7 +18,7 @@ export class VacationRequest {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.requests, { eager: true })
+  @ManyToOne(() => User, (user) => user.requests, { eager: true, onDelete: "CASCADE" })
   user: User;
 
   @Column()

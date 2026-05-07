@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useUsers } from "../composables/useUsers";
 
-const { users, loading, error, fetchUsers, createUser } = useUsers();
+const { users, loading, error, fetchUsers, createUser, deleteUser } = useUsers();
 
 const newUser = ref({
   name: "",
@@ -83,8 +83,11 @@ onMounted(fetchUsers);
       <div v-else-if="error" class="error-message">{{ error }}</div>
       <ul v-else class="user-list">
         <li v-for="user in users" :key="user.id" class="user-list-item">
-          <span>{{ user.name }}</span>
-          <span class="user-role">{{ user.role }}</span>
+          <div class="user-list-details">
+            <p class="user-name">{{ user.name }}</p>
+            <span class="user-role badge" :class="user.role">{{ user.role }}</span>
+          </div>
+          <button class="delete-button " @click="deleteUser(user.id)">Delete</button>
         </li>
       </ul>
     </div>
