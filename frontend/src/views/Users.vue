@@ -1,77 +1,92 @@
 <script setup lang="ts">
-import { ref, onMounted} from "vue";
-import api from "../services/api";
+import { ref, onMounted } from "vue";
+import { useUsers } from "../composables/useUsers";
 
-
-type Role = "requester" | "validator";
-
-type User = {
-  id: number;
-  name: string;
-  role: Role;
-};
-
-const users = ref<User[]>([]);
+const { users, loading, error, fetchUsers, createUser } = useUsers();
 
 const newUser = ref({
   name: "",
-  role: "requester" as Role,
+  role: "requester" as const,
 });
+const formError = ref<string | null>(null);
+const submitInProgress = ref(false);
 
-/** Fetch users from backend */
-const fetchUsers = async () => {
-  const res = await api.get("/users");
-  users.value = res.data;
-};
+const handleCreateUser = async () => {
+  formError.value = null;
+  if (!newUser.value.name.trim()) {
+    formError.value = "Please enter a user name.";
+    return;
+  }
 
-/** Create user */
-const createUser = async () => {
+  submitInProgress.value = true;
   try {
-    if (!newUser.value.name.trim()) {
-      return;
-    }
-
-    const res = await api.post("/users", {
-      name: newUser.value.name,
+    await createUser({
+      name: newUser.value.name.trim(),
       role: newUser.value.role,
     });
 
-    // add newly created user to list
-    users.value.push(res.data);
-
-    // reset form
     newUser.value = {
       name: "",
       role: "requester",
     };
-  } catch (err) {
-    console.error("Failed to create user", err);
+  } catch {
+    formError.value = "Unable to create the user. Please try again.";
+  } finally {
+    submitInProgress.value = false;
   }
 };
 
 onMounted(fetchUsers);
-
 </script>
 
 <template>
-  <div>
-    <h1>Users</h1>
+  <section class="page-shell">
+    <div class="page-header">
+      <div>
+        <h1>Users Management</h1>
+        <p class="muted">Add new users and see the full list of everyone in the system.</p>
+      </div>
+    </div>
 
-    <input v-model="newUser.name" placeholder="Name" />
+    <div class="card user-panel">
+      <h2>Create a new user</h2>
+      <div class="form-grid two-columns">
+        <label>
+          Name
+          <input v-model="newUser.name" type="text" placeholder="Enter name" />
+        </label>
 
-    <select v-model="newUser.role">
-      <option value="requester">Requester</option>
-      <option value="validator">Validator</option>
-    </select>
+        <label>
+          Role
+          <select v-model="newUser.role">
+            <option value="requester">Requester</option>
+            <option value="validator">Validator</option>
+          </select>
+        </label>
+      </div>
 
-    <button @click="createUser">Create User</button>
+      <div class="form-actions">
+        <button class="primary" @click="handleCreateUser" :disabled="submitInProgress">
+          {{ submitInProgress ? "Saving..." : "Create user" }}
+        </button>
+        <p class="error-message" v-if="formError">{{ formError }}</p>
+      </div>
+    </div>
 
-    <hr />
+    <div class="card users-list-panel">
+      <div class="dashboard-header">
+        <h2>All users</h2>
+        <p class="muted">The user selector in the left sidebar will choose the current active user.</p>
+      </div>
 
-    <ul>
-      <li v-for="u in users" :key="u.id">
-        {{ u.name }} - {{ u.role }}
-      </li>
-    </ul>
-  </div>
+      <div v-if="loading" class="empty-state">Loading users…</div>
+      <div v-else-if="error" class="error-message">{{ error }}</div>
+      <ul v-else class="user-list">
+        <li v-for="user in users" :key="user.id" class="user-list-item">
+          <span>{{ user.name }}</span>
+          <span class="user-role">{{ user.role }}</span>
+        </li>
+      </ul>
+    </div>
+  </section>
 </template>

@@ -1,12 +1,12 @@
-<template>
-  <div style="font-family: sans-serif;">
-    <nav style="display:flex; gap:10px; padding:10px; border-bottom:1px solid #ccc;">
-      <router-link to="/requests">Requests time off</router-link>
-      <router-link to="/users">Add Users</router-link>
-    </nav>
+<script setup lang="ts">
+import Sidebar from "./components/Sidebar.vue";
+</script>
 
-    <div style="padding: 20px;">
+<template>
+  <div class="app-shell">
+    <Sidebar />
+    <main class="main-content">
       <router-view />
-    </div>
+    </main>
   </div>
 </template>
