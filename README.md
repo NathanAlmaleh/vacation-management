@@ -82,3 +82,14 @@ npm test
 npm run format
 npm run format:check
 ```
+
+## Create new user requester/validator
+
+<img width="1414" height="590" alt="Screenshot 2026-05-09 at 21 32 28" src="https://github.com/user-attachments/assets/54f543c2-396e-4e02-a7d5-2156764b020f" />
+
+## Switch between users add validator options
+
+<img width="1426" height="838" alt="Screenshot 2026-05-09 at 21 35 44" src="https://github.com/user-attachments/assets/672469e5-105f-4c61-a6fe-e250796a77f4" />
+
+
+
