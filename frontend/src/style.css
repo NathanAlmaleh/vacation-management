@@ -92,7 +92,7 @@ h2 {
   gap: 4px;
 }
 
-.current-user-avatar{
+.current-user-avatar {
   width: 60px;
   height: 60px;
   border-radius: 50% !important;
@@ -100,7 +100,7 @@ h2 {
 
 .current-user-name {
   font-weight: 900;
-  color:white;
+  color: white;
 }
 
 .current-user-role {

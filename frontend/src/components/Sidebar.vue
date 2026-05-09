@@ -13,11 +13,7 @@
         </option>
       </select>
       <div v-if="currentUser" class="current-user-meta">
-        <img
-          :src="avatar"
-          alt="User Avatar"
-          class="current-user-avatar"
-        />
+        <img :src="avatar" alt="User Avatar" class="current-user-avatar" />
         <span class="current-user-name">{{ currentUser.name }}</span>
         <small class="current-user-role">{{ currentUser.role }}</small>
       </div>
@@ -31,7 +27,7 @@
         >📊 Requests Dashboard</router-link
       >
       <router-link to="/users" class="nav-link" active-class="active-link"
-        >👥  Users Management</router-link
+        >👥 Users Management</router-link
       >
     </nav>
   </aside>

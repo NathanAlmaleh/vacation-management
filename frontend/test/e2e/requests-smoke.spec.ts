@@ -61,7 +61,8 @@ test('smoke: loads /requests and shows dashboard heading', async ({ page }) => {
 
   await page.goto('/requests');
 
-  await expect(page.getByRole('heading', { name: 'Requests dashboard' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Requests dashboard' })
+  ).toBeVisible();
   await expect(page.getByText('New vacation request')).toBeVisible();
 });
-

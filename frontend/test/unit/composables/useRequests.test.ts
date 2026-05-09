@@ -74,4 +74,3 @@ describe('useRequests', () => {
     expect(requests.value[0].id).toBe(2);
   });
 });
-

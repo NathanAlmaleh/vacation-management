@@ -32,7 +32,10 @@ const dateInputs = (page: Page) => page.locator('input[type="date"]');
 
 const requestRoute = async (
   page: Page,
-  handler: (request: ReturnType<Route['request']>, route: Route) => Promise<void>
+  handler: (
+    request: ReturnType<Route['request']>,
+    route: Route
+  ) => Promise<void>
 ) =>
   page.route('**/requests**', async (route) => {
     if (await continueDocument(route)) return;
@@ -51,21 +54,26 @@ test('submits a time off request as a requester', async ({ page }) => {
       return;
     }
 
-    const payload = JSON.parse(await request.postData() ?? '{}');
+    const payload = JSON.parse((await request.postData()) ?? '{}');
     await route.fulfill(
-      json({
-        id: 1,
-        ...payload,
-        status: 'pending',
-        user: requesterUser,
-      }, 201)
+      json(
+        {
+          id: 1,
+          ...payload,
+          status: 'pending',
+          user: requesterUser,
+        },
+        201
+      )
     );
   });
 
   await setCurrentUser(page, requesterUser);
   await page.goto('/requests');
 
-  await expect(page.getByRole('heading', { name: 'Request Time Off' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Request Time Off' })
+  ).toBeVisible();
   await dateInputs(page).nth(0).fill('2025-12-01');
   await dateInputs(page).nth(1).fill('2025-12-05');
   await page.fill('textarea', 'Family vacation');
@@ -75,7 +83,9 @@ test('submits a time off request as a requester', async ({ page }) => {
   await expect(page.getByText('pending', { exact: true })).toBeVisible();
 });
 
-test('approves and rejects pending requests as a validator', async ({ page }) => {
+test('approves and rejects pending requests as a validator', async ({
+  page,
+}) => {
   const requests = [
     {
       id: 1,
@@ -124,7 +134,9 @@ test('approves and rejects pending requests as a validator', async ({ page }) =>
   await page.goto('/requests');
 
   const userSelect = page.locator('.user-select');
-  await expect(userSelect.locator('option:checked')).toHaveText('Validator User — validator');
+  await expect(userSelect.locator('option:checked')).toHaveText(
+    'Validator User — validator'
+  );
   await expect(userSelect).toHaveValue('2');
 
   const approveCard = requestCard(page, 'Approve me');
@@ -132,13 +144,21 @@ test('approves and rejects pending requests as a validator', async ({ page }) =>
 
   await expect(approveCard.getByText('pending', { exact: true })).toBeVisible();
   await Promise.all([
-    page.waitForResponse((res) => res.url().includes('/requests/1') && res.request().method() === 'PATCH'),
+    page.waitForResponse(
+      (res) =>
+        res.url().includes('/requests/1') && res.request().method() === 'PATCH'
+    ),
     approveCard.getByRole('button', { name: 'Approve' }).click(),
   ]);
-  await expect(approveCard.getByText('approved', { exact: true })).toBeVisible();
+  await expect(
+    approveCard.getByText('approved', { exact: true })
+  ).toBeVisible();
 
   await Promise.all([
-    page.waitForResponse((res) => res.url().includes('/requests/2') && res.request().method() === 'PATCH'),
+    page.waitForResponse(
+      (res) =>
+        res.url().includes('/requests/2') && res.request().method() === 'PATCH'
+    ),
     rejectCard.getByRole('button', { name: 'Reject' }).click(),
   ]);
   await expect(rejectCard.getByText('rejected', { exact: true })).toBeVisible();

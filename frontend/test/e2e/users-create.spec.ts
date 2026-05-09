@@ -20,7 +20,10 @@ const mockUsers = (page: Page, users: Array<object>) =>
     await route.fulfill(json(users));
   });
 
-const mockCreateUser = (page: Page, users: Array<{ id: number; name: string; role: string }>) =>
+const mockCreateUser = (
+  page: Page,
+  users: Array<{ id: number; name: string; role: string }>
+) =>
   page.route('**/users**', async (route) => {
     if (await continueDocument(route)) return;
     const request = route.request();
@@ -31,7 +34,7 @@ const mockCreateUser = (page: Page, users: Array<{ id: number; name: string; rol
     }
 
     if (request.method() === 'POST') {
-      const payload = JSON.parse(await request.postData() ?? '{}');
+      const payload = JSON.parse((await request.postData()) ?? '{}');
       const newUser = { id: users.length + 1, ...payload };
       users.push(newUser);
       await route.fulfill(json(newUser, 201));
@@ -54,10 +57,14 @@ test('creates a new user on the Users page', async ({ page }) => {
 
   await page.goto('/users');
 
-  await expect(page.getByRole('heading', { name: 'Users Management' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Users Management' })
+  ).toBeVisible();
   await fillUserName(page, 'Test User');
   await page.getByRole('button', { name: 'Create user' }).click();
 
   await expect(userListRow(page, 'Test User')).toBeVisible();
-  await expect(page.locator('.users-list-panel .user-role', { hasText: 'requester' })).toBeVisible();
+  await expect(
+    page.locator('.users-list-panel .user-role', { hasText: 'requester' })
+  ).toBeVisible();
 });
